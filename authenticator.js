@@ -1,24 +1,26 @@
 var request = require("request");
 
 var getToken = function(site, callback){
-  process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 
   request({
-      url: site + 'api/Authentication?username=sh@syscomworld.com&password=S%C3%A5merFezd79&Role=30',
+      url: site + 'api/Authentication?username=sh@syscomworld.com&password=SåmerFezd79&Role=30',
       // qs: {from: 'blog example', time: +new Date()}, //Query string data
       method: 'POST', //Specify the method
-      proxy: "http://127.0.0.1:8888",
+      json: true,
       headers: { //We can define headers too
           'Content-Type': 'application/vnd.api+json',
           'Accept': '*/*',
       }
   }, function(error, response, body){
-      if(error) {
-          console.log(error);
-      } else {
-          console.log(response.statusCode, body);
-      }
+    if (!error && response.statusCode == 200) {
+          callback(null, body);
+        } else {
+          console.log('statusCode', response.statusCode);
+          console.log('body', body);
+          callback(response.statusCode, error);
+        }
   });
+
   //
   // request.post({
   //   url: site + 'api/Authentication?username=sh@syscomworld.com&password=S%C3%A5merFezd79&Role=30',

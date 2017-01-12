@@ -64,7 +64,7 @@ var test = function(threads, numberOfTests, interval, token, site) {
   console.log('Starting ' + threads + ' thread(s), running ' + numberOfTests +' tests at an interval of ' + interval + ' tests/pr second.');
 
   for (var i = 0; i < threads; i++) {
-    var child = child_process.fork(__dirname + '/workers/worker.js', [numberOfTests, interval, token, site]);
+    var child = child_process.fork(__dirname + '/worker.js', [numberOfTests, interval, token, site]);
 
     child.on('close', function () {
         childDone();

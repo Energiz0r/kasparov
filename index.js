@@ -12,10 +12,13 @@ var firstCommand = process.argv[2];
 var getSite = function(env){
   switch (env) {
     case 'canary':
-      return 'http://canary.pureservice.com/agent/'
+      return 'https://canary.pureservice.com/agent/'
       break;
     case 'siggen':
       return 'https://osl-c-sh-s/Pureservice/'
+    case 'local':
+      return 'http://localhost:4444/'
+      break;
     default:
 
   }
