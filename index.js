@@ -1,9 +1,7 @@
 var tester = require('./tester.js');
 var auth = require('./authenticator.js');
 var _ = require('lodash');
-// var site = 'http://osl-c-sh-s/Pureservice/';
-// var site = 'http://localhost:4444/';
-// var site = 'http://canary.pureservice.com/agent/';
+
 var interval = 1;
 var count = 10;
 var threads = 1;
@@ -51,7 +49,7 @@ if (firstCommand === '-help') {
 } else {
   parseCLA(process.argv);
 
-  auth.getToken(getSite(environment), function(err, token){
+  auth.getToken(getSite(environment), environment, function(err, token){
     tester.test(threads, count, interval, token, getSite(environment));
   });
 }

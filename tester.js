@@ -53,13 +53,18 @@ var childDone = function(){
     console.log('Server able to take away ' + ((reqprsec/rate)*100).toFixed(2) +'% of the requests');
   }
 };
+var setAttributes = function(threads, interval){
+  rate = parseInt(threads)*parseInt(interval);
+  childrenSpawned = threads;
+
+}
 
 var test = function(threads, numberOfTests, interval, token, site) {
-  rate = parseInt(threads)*parseInt(interval);
+  setAttributes(threads, interval);
+
   if (threads >= numCPUs.length) {
     threads = numCPUs.length-1;
   }
-  childrenSpawned = threads;
   console.log('Nuking ' + site + ' at a rate of ' + rate + ' Requests / Second');
   console.log('Starting ' + threads + ' thread(s), running ' + numberOfTests +' tests at an interval of ' + interval + ' tests/pr second.');
 
@@ -79,7 +84,7 @@ var test = function(threads, numberOfTests, interval, token, site) {
            addtime(split[0]);
            requestTimes.push(parseInt(split[1]));
            end = new Date().getTime();
-           process.stdout.write('reqSent/sec: ' + reqPrSec(start, new Date().getTime(), requestsSent).toFixed(2) +
+           process.stdout.write('TotResReceived: ' + requestsSent + ' reqSent/sec: ' + reqPrSec(start, new Date().getTime(), requestsSent).toFixed(2) +
                                 ' AVG-AC-TIME: ' + _.mean(times).toFixed(2) + '  AVG-REQ-TIME: ' + _.mean(requestTimes).toFixed(2) +
                                 ' MAX-AC: ' + _.max(times).toFixed(2) + ' MAX-REQ: ' + _.max(requestTimes)
                                 + '                                     \r')
