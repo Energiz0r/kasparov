@@ -9,6 +9,7 @@ var numberOfTestsRan = 0;
 var times = [];
 var requestTimes = [];
 var requestsSent = 0;
+var reqsPrSec = [];
 var childrenSpawned = 0;
 var start = new Date().getTime();
 var rate;
@@ -53,6 +54,10 @@ var childDone = function(){
     console.log('ACTION-REC/SEC: ' + reqprsec);
     console.log('Server able to take away ' + ((reqprsec/rate)*100).toFixed(2) +'% of the requests');
   }
+  dbHandler.createStatistic("Whooooo", requestsSent, _.max(reqsPrSec), function(){
+    dbHandler.closeConnection();
+  });
+
 };
 var setAttributes = function(threads, interval){
   rate = parseInt(threads)*parseInt(interval);
@@ -84,8 +89,10 @@ var test = function(threads, numberOfTests, interval, token, site) {
            var split = _.split(message, '___');
            addtime(split[0]);
            requestTimes.push(parseInt(split[1]));
+           var reqsPrSecond = reqPrSec(start, new Date().getTime(), requestsSent).toFixed(2);
+           reqsPrSec.push(reqsPrSecond)
            end = new Date().getTime();
-           process.stdout.write('TotResReceived: ' + requestsSent + ' reqSent/sec: ' + reqPrSec(start, new Date().getTime(), requestsSent).toFixed(2) +
+           process.stdout.write('TotResReceived: ' + requestsSent + ' reqSent/sec: ' + reqsPrSecond +
                                 ' AVG-AC-TIME: ' + _.mean(times).toFixed(2) + '  AVG-REQ-TIME: ' + _.mean(requestTimes).toFixed(2) +
                                 ' MAX-AC: ' + _.max(times).toFixed(2) + ' MAX-REQ: ' + _.max(requestTimes)
                                 + '                                     \r')

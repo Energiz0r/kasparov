@@ -1,26 +1,36 @@
 var mongoose = require('mongoose');
-
-mongoose.connect('mongodb://localhost:27017');
-
-mongoose.connection.db.listCollections().toArray(function(err, names) {
-    if (err) {
-        console.log(err);
-    }
-    else {
-        names.forEach(function(e,i,a) {
-            mongoose.connection.db.dropCollection(e.name);
-            console.log("--->>", e.name);
-        });
-    }
+mongoose.Promise = global.Promise
+mongoose.connect('localhost', 'kasparov');
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log('Connected to DB!')
 });
-//
-// var Schema = mongoose.Schema;
-//
-// var statisticSchema = mongoose.Schema({
-//   date: { type: Date, default: Date.now },
-//   message: String,
-//   reqSent: Number,
-//   maxReqSec: Number
-// })
-//
-// var Statistic = mongoose.model('Statistic', statisticSchema);
+
+
+var Schema = mongoose.Schema;
+
+var statisticSchema = mongoose.Schema({
+  date: { type: Date, default: Date.now },
+  message: String,
+  reqSent: Number,
+  maxReqSec: Number
+})
+
+var Statistic = mongoose.model('Statistic', statisticSchema);
+
+module.exports = {
+  closeConnection: function() {
+    mongoose.connection.close()
+  },
+  createStatistic: function(message, reqSent, maxReqSec, cb){
+    var stat = new Statistic({message: message, reqSent: reqSent, maxReqSec: maxReqSec})
+    stat.save(function (err, product, numAffected) {
+      if (err) console.log('error', err);
+      // saved!
+      console.log('product', product);
+      console.log('numAffected', numAffected);
+      cb();
+    })
+  }
+}
