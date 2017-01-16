@@ -1,6 +1,7 @@
 var child_process = require('child_process');
 var numCPUs = require('os').cpus();
 var _ = require('lodash');
+var dbHandler = require('./dbHandler.js')
 
 var runTests = true;
 var numberOfTestsRan = 0;
