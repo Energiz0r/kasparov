@@ -1,15 +1,9 @@
 var request = require("request");
 var login = require("./login.json");
 
-if(!login){
-  throw new Error("You are missing a login.json file with usernames and password.")
-}
-
-var getToken = function(site, environment, callback){
-  var un = login[environment].username;
-  var pass = login[environment].password;
+var getToken = function(site, username, password, callback){
   request({
-      url: site + 'api/Authentication?username='+un+'&password='+pass+'&Role=30',
+      url: site + 'api/Authentication?username='+ username +'&password='+ password +'&Role=30',
       method: 'POST',
       json: true,
       headers: {

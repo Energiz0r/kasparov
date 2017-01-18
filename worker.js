@@ -1,4 +1,5 @@
 var request = require("request");
+var urlConfig = require("./urls.js");
 
 var max = process.argv[2];
 var interval = (1000/parseInt(process.argv[3]));
@@ -28,7 +29,7 @@ var r = function(){
     encoding:'utf8',
     headers: {
       'Content-Type': 'application/vnd.api+json',
-      'Authorization': 'Bearer ' + token,
+      'Authorization': "Bearer " + token,
       'Accept' : '*/*'
     }
   }, function (error, response, body, d) {
@@ -37,7 +38,6 @@ var r = function(){
       } else {
         if (response && response.statusCode) {
           console.log('statusCode: ' + response.statusCode);
-          console.log('body: ' + body);
         } else {
           console.log('Zomg, response null!');
         }
@@ -47,16 +47,7 @@ var r = function(){
 };
 
 var getRandomUrl = function(){
-  var urls = [
-    // 'api/ticket/2/requestNumber?include=assignedAgent,user,user.phonenumber,user.phonenumbers,user.emailAddress,user.emailAddresses,user.address,user.company,user.memberships,form,form.datas,tasks',
-    // 'api/ticket/4/requestNumber?include=assignedAgent,user,user.phonenumber,user.phonenumbers,user.emailAddress,user.emailAddresses,user.address,user.company,user.memberships,form,form.datas,tasks',
-    // 'api/ticket/9/requestNumber?include=assignedAgent,user,user.phonenumber,user.phonenumbers,user.emailAddress,user.emailAddresses,user.address,user.company,user.memberships,form,form.datas,tasks',
-    // 'api/ticket/7/requestNumber?include=assignedAgent,user,user.phonenumber,user.phonenumbers,user.emailAddress,user.emailAddresses,user.address,user.company,user.memberships,form,form.datas,tasks',
-    'api/status',
-    'api/user?include=emailAddresses,phonenumbers,memberships,memberships.team,credentials,address,emailAddress,phonenumber&id=30',
-    'api/user/1?include=memberships,credentials,address,emailAddress,emailAddresses,phonenumber,phonenumbers',
-    'api/listdefinition'
-  ];
+  var urls = urlConfig.getEndpoints();
   var randomIndex = getRandomInt(0, urls.length-1);
   return site + urls[randomIndex]
 };

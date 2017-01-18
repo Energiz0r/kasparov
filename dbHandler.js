@@ -3,10 +3,6 @@ mongoose.Promise = global.Promise
 mongoose.connect('localhost', 'kasparov');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-  console.log('Connected to DB!')
-});
-
 
 var Schema = mongoose.Schema;
 
@@ -26,11 +22,11 @@ module.exports = {
   createStatistic: function(message, reqSent, maxReqSec, cb){
     var stat = new Statistic({message: message, reqSent: reqSent, maxReqSec: maxReqSec})
     stat.save(function (err, product, numAffected) {
-      if (err) console.log('error', err);
-      // saved!
-      console.log('product', product);
-      console.log('numAffected', numAffected);
+      if (err) {
+        console.log('error', err);
+      }
+
       cb();
-    })
+    });
   }
 }
