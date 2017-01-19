@@ -12,6 +12,7 @@ var getToken = function(site, username, password, callback){
       }
   }, function(error, response, body){
     if (!error && response.statusCode == 200) {
+          console.log('Auth OK!');
           callback(null, body);
         } else {
           console.log('statusCode', response.statusCode);
